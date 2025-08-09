@@ -1,0 +1,29 @@
+<?php
+$HOST = 'http://192.168.1.50:9100'; // change to device IP
+$payload = [
+  "mode" => "text",
+  "lines" => [
+    "ZAPP MART",
+    "----------------------",
+    "Item A       2 x 4.00",
+    "Total            8.00",
+    "",
+    "Thank you!"
+  ],
+  "align" => "left",
+  "bold" => false,
+  "width_scale" => 1,
+  "height_scale" => 1,
+  "cut" => true
+];
+$ch = curl_init("$HOST/print");
+curl_setopt_array($ch, [
+  CURLOPT_POST => true,
+  CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+  CURLOPT_POSTFIELDS => json_encode($payload),
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_TIMEOUT => 10
+]);
+$resp = curl_exec($ch);
+if ($resp === false) die(curl_error($ch));
+echo $resp;
